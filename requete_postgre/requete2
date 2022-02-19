@@ -1,0 +1,9 @@
+-- calcul de la proportion des ventes d'appartements par le nombre de pièces -- 
+
+select	nb_piece as "nombre de pièces",
+		round(count(nb_piece) * 100.0 / (select count(id_vente) from vente), 2) as proportion 
+	from bien
+	inner join vente on vente.idbien = bien.id_bien
+	where type_local = 'Appartement' and surf_carrez != 0
+	group by nb_piece
+	order by nb_piece;

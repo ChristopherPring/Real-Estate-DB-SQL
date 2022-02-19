@@ -1,0 +1,16 @@
+with
+-- prix du m² pour un 2 pieces --
+	appT2 as 
+		(select round(avg(val_fon / surf_carrez),2) as prixT2 from vente
+		inner join bien on bien.id_bien = vente.idbien
+		where nb_piece = 2 and type_local like 'App%'),
+-- prix du m² pour un 3 pieces --
+	appT3 as
+		(select round(avg(val_fon / surf_carrez),2) as prixT3 from vente
+		inner join bien on bien.id_bien = vente.idbien
+		where nb_piece = 3 and type_local like 'App%')
+                
+select 	prixT2,
+		prixT3, 
+        round(((prixT3 - prixT2)*100 / prixT2 ),2) as "diff en %"
+	from appT2, appT3;

@@ -1,0 +1,24 @@
+with 
+-- table provisoire trimestre 1 --
+trim1 as
+	(select nom, id_commune, count(id_vente) as nbventes1 from commune
+	inner join bien on bien.idcom = commune.id_commune
+	inner join vente on vente.idbien = bien.id_bien
+	where date_mut between '2020-01-01' and '2020-03-31'
+	group by nom, id_commune),
+-- table provisoire trimestre 2 --
+trim2 as
+	(select nom, id_commune, count(id_vente) as nbventes2 from commune
+	inner join bien on bien.idcom = commune.id_commune
+	inner join vente on vente.idbien = bien.id_bien
+	where date_mut between '2020-04-01' and '2020-06-30'
+	group by nom, id_commune)
+
+-- calcul du taux d'evolution des ventes par commune --    
+select 	trim1.nom,
+		nbventes2 as "nombre de ventes au 2e trimestre",
+        nbventes1 as "nombre de ventes au 1er trimestre", 
+        round((nbventes2 - nbventes1) * 100 / nbventes1) as evolution 
+        from trim1
+inner join trim2 on trim1.nom = trim2.nom
+where round((nbventes2 - nbventes1) * 100 / nbventes1) > 20;

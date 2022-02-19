@@ -1,0 +1,6 @@
+-- nombre d'appartements vendus au premier semestre --
+
+select count(distinct id_vente) from vente
+inner join bien on bien.id_bien = vente.idbien 
+where type_local = 'Appartement' 
+	and date_mut between '2020-01-01' and '2020-06-30';

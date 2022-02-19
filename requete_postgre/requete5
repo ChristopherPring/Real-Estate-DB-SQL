@@ -1,0 +1,9 @@
+-- liste des 10 appartements les plus chers --
+
+select val_fon, surf_carrez, dep as departement, adresse
+	from vente
+    inner join bien on bien.id_bien = vente.idbien
+	inner join commune on commune.id_commune = bien.idcom
+    where type_local = 'Appartement'
+    order by val_fon DESC
+    limit 10;
